@@ -18,6 +18,16 @@ jobs:
           command: |
             sudo systemctl enable systemd-logind
             sudo systemctl start systemd-logind
+            sleep 5
+
+      - run:
+          name: Verify systemd-logind is Active
+          command: |
+            while ! systemctl is-active --quiet systemd-logind; do
+              echo "Waiting for systemd-logind to become active..."
+              sleep 2
+            done
+            echo "systemd-logind is active."
 
       - run:
           name: Verify D-Bus Services
