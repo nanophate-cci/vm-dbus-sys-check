@@ -1,0 +1,28 @@
+version: 2.1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2204:2024.05.1
+    steps:
+      - checkout
+
+      - run:
+          name: Install Dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y dbus systemd gnome-keyring
+
+      - run:
+          name: Start systemd-logind Service
+          command: |
+            sudo systemctl enable systemd-logind
+            sudo systemctl start systemd-logind
+
+     - run:
+       name: Verify D-Bus Services
+       command: |
+         systemctl status systemd-logind
+         systemctl status org.freedesktop.hostname1
+         systemctl status org.freedesktop.Accounts
+         systemctl status gnome-keyring
